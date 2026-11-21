@@ -1,1 +1,51 @@
-<h1>Accent quebecois</h1>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parler québécois : le quiz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#eef3f9;--card:#fff;--ink:#14213d;--mute:#56627a;--acc:#003da5;--accbg:#e3ecfb;--ok:#17794a;--okbg:#e2f4ea;--ko:#b3341f;--kobg:#fbe8e4;--line:#cdd7e6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--card:#16213a;--ink:#e8eefb;--mute:#9fb0cf;--acc:#8db4ff;--accbg:#1f3157;--ok:#6fd6a0;--okbg:#17332a;--ko:#ff9d8a;--kobg:#3a2320;--line:#2c3b5e}}
+:root[data-theme="dark"]{--bg:#0e1626;--card:#16213a;--ink:#e8eefb;--mute:#9fb0cf;--acc:#8db4ff;--accbg:#1f3157;--ok:#6fd6a0;--okbg:#17332a;--ko:#ff9d8a;--kobg:#3a2320;--line:#2c3b5e}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:1.15rem;margin:8px 0 12px;color:var(--mute);font-weight:400}
+#nav{display:flex;gap:8px;margin-bottom:14px}
+.chip{flex:1;padding:10px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+.chip.on{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+.chip.fin::after{content:" ✓"}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.steps{display:flex;gap:6px;font-size:.85rem;color:var(--mute);margin-bottom:14px}
+.steps span{flex:1;padding-bottom:6px;border-bottom:3px solid var(--line)}
+.steps .on{color:var(--ink);font-weight:700;border-color:var(--acc)}
+.steps .done{border-color:var(--ok)}
+h2{font-size:1.9rem;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+.consigne{background:var(--accbg);border-left:4px solid var(--acc);padding:10px 14px;border-radius:0 8px 8px 0;margin:0 0 16px}
+.ctx{font-style:italic;margin:0 0 16px;padding:0 0 0 14px;border-left:2px solid var(--line);color:var(--mute)}
+.q{font-weight:700;margin:18px 0 8px}
+.opt{display:block;width:100%;text-align:left;margin:0 0 8px;padding:12px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.ko{background:var(--kobg);border-color:var(--ko)}
+.fb{margin:4px 0 0;font-size:.95rem;color:var(--mute)}
+.words{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.w{padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}.w.on{background:var(--accbg);border-color:var(--acc)}.w.ok{background:var(--okbg);border-color:var(--ok)}.w.ko{background:var(--kobg);border-color:var(--ko)}.w:disabled{cursor:default}
+audio{width:100%;margin:0 0 14px}
+textarea{width:100%;min-height:90px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.small{font-size:.8rem;color:var(--mute)}
+.go{margin-top:18px;padding:12px 20px;border:0;border-radius:10px;background:var(--acc);color:var(--bg);font:inherit;font-weight:700;cursor:pointer}
+.go:disabled{opacity:.4;cursor:default}
+.score{font-size:3rem;font-weight:700;margin:6px 0}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>Parler québécois : six expressions à découvrir</h1>
+<div id="nav"></div>
+<div class="card" id="app"></div>
+</main>
