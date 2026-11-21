@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parler québécois : le quiz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#eef3f9;--card:#fff;--ink:#14213d;--mute:#56627a;--acc:#003da5;--accbg:#e3ecfb;--ok:#17794a;--okbg:#e2f4ea;--ko:#b3341f;--kobg:#fbe8e4;--line:#cdd7e6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--card:#16213a;--ink:#e8eefb;--mute:#9fb0cf;--acc:#8db4ff;--accbg:#1f3157;--ok:#6fd6a0;--okbg:#17332a;--ko:#ff9d8a;--kobg:#3a2320;--line:#2c3b5e}}
+:root[data-theme="dark"]{--bg:#0e1626;--card:#16213a;--ink:#e8eefb;--mute:#9fb0cf;--acc:#8db4ff;--accbg:#1f3157;--ok:#6fd6a0;--okbg:#17332a;--ko:#ff9d8a;--kobg:#3a2320;--line:#2c3b5e}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:1.15rem;margin:8px 0 12px;color:var(--mute);font-weight:400}
+#nav{display:flex;gap:8px;margin-bottom:14px}
+.chip{flex:1;padding:10px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+.chip.on{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+.chip.fin::after{content:" ✓"}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.steps{display:flex;gap:6px;font-size:.85rem;color:var(--mute);margin-bottom:14px}
+.steps span{flex:1;padding-bottom:6px;border-bottom:3px solid var(--line)}
+.steps .on{color:var(--ink);font-weight:700;border-color:var(--acc)}
+.steps .done{border-color:var(--ok)}
+h2{font-size:1.9rem;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+.consigne{background:var(--accbg);border-left:4px solid var(--acc);padding:10px 14px;border-radius:0 8px 8px 0;margin:0 0 16px}
+.ctx{font-style:italic;margin:0 0 16px;padding:0 0 0 14px;border-left:2px solid var(--line);color:var(--mute)}
+.q{font-weight:700;margin:18px 0 8px}
+.opt{display:block;width:100%;text-align:left;margin:0 0 8px;padding:12px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.ko{background:var(--kobg);border-color:var(--ko)}
+.fb{margin:4px 0 0;font-size:.95rem;color:var(--mute)}
+.words{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.w{padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}.w.on{background:var(--accbg);border-color:var(--acc)}.w.ok{background:var(--okbg);border-color:var(--ok)}.w.ko{background:var(--kobg);border-color:var(--ko)}.w:disabled{cursor:default}
+audio{width:100%;margin:0 0 14px}
+textarea{width:100%;min-height:90px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.small{font-size:.8rem;color:var(--mute)}
+.go{margin-top:18px;padding:12px 20px;border:0;border-radius:10px;background:var(--acc);color:var(--bg);font:inherit;font-weight:700;cursor:pointer}
+.go:disabled{opacity:.4;cursor:default}
+.score{font-size:3rem;font-weight:700;margin:6px 0}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>Parler québécois : six expressions à découvrir</h1>
+<div id="nav"></div>
+<div class="card" id="app"></div>
+</main>
+<script>
+// Pour intégrer tes extraits : AUDIO[0] = "data:audio/mpeg;base64,..." (un par expression, dans l’ordre)
+const AUDIO=["resources/pelure.mp3","resources/patate.mp3","resources/jus.mp3","resources/talons.mp3","resources/soupe.mp3","resources/croutes.mp3"];
+const E=[
+{t_:"S’habiller en pelure d’oignon",
+ctx:"Fin octobre à Montréal : −2 °C le matin, 14 °C l’après-midi. Julie enfile un t-shirt, un chandail, un manteau et une tuque. À midi, elle enlève la tuque, puis le manteau.",
+m:{q:"Que veut dire « s’habiller en pelure d’oignon » ?",o:["Porter plusieurs couches de vêtements qu’on peut enlever ou remettre","S’habiller avec des vêtements très fins et transparents","S’habiller tout en blanc pour aller au travail"],a:0,f:"Comme l’oignon a plusieurs pelures, on superpose les couches pour s’adapter aux écarts de température."},
+t:{q:"Écoute l’extrait. Touche les mots où tu entends une voyelle nasale (l’air passe par le nez).",w:["habiller","en","pelure","oignon"],a:[1,3],f:"« en » et « oignon » contiennent une voyelle nasale : [ɑ̃] et [ɔ̃]."},
+o:{q:"Prononce « en » et « oignon » en te pinçant le nez. Qu’observes-tu ?",o:["Le son change : l’air passe aussi par le nez, et on n’entend pas de [n] après la voyelle","Rien ne change : l’air passe seulement par la bouche","On entend clairement un [n] après la voyelle"],a:0,f:"Une voyelle nasale se prononce sans [n] audible. Au Québec, le « on » est souvent plus fermé, proche de [õ]."},
+l:{q:"Au Québec, que désigne une tuque ?",o:["Un bonnet d’hiver","Une paire de gants","Une écharpe"],a:0,f:"La tuque est le bonnet d’hiver, bien utile quand on s’habille en pelure d’oignon."}},
+{t_:"Ne pas lâcher la patate",
+ctx:"Marc a raté son examen de maths, mais il continue d’étudier chaque soir. Son ami lui dit : « Lâche pas la patate, tu vas y arriver ! »",
+m:{q:"Que veut dire « ne pas lâcher la patate » ?",o:["Ne pas faire tomber de pommes de terre","Se débarrasser d’un problème","Ne pas abandonner, persévérer"],a:2,f:"On garde la patate en main comme on garde son objectif : on continue malgré les difficultés."},
+t:{q:"Écoute « Lâche pas la patate ». Touche le mot où le « a » sonne plus grave et plus long.",w:["lâche","la","patate","vas"],a:[0],f:"Dans « lâche », le « â » est un [ɑ] plus grave et plus long. Dans « la », « patate » et « vas », on entend un [a] plus bref."},
+o:{q:"Quel autre mot contient le même « a » grave et long que « lâche » ?",o:["la","pâte","patte"],a:1,f:"« lâche » et « pâte » contiennent [ɑ] ; « la » et « patte » contiennent [a]. Le français québécois garde souvent cette distinction."},
+l:{q:"Quel verbe est proche de « ne pas lâcher la patate » ?",o:["Abandonner","Persévérer","Se reposer"],a:1,f:"« Persévérer », « tenir bon » : on continue malgré les obstacles."}},
+{t_:"Être dans le jus",
+ctx:"C’est le rush du vendredi soir au resto. Les commandes s’accumulent et la cuisinière lance : « Je suis dans le jus, j’ai pas une minute ! »",
+m:{q:"Que veut dire « être dans le jus » ?",o:["Être débordé, avoir beaucoup de choses à faire","Avoir très soif","Être tombé dans l’eau"],a:0,f:"Au moment du rush, la cuisinière est submergée de commandes : elle « baigne » dans le travail."},
+t:{q:"Écoute « Je suis dans le jus, j’ai pas une minute ». Touche le mot avec une voyelle nasale.",w:["suis","dans","jus","minute"],a:[1],f:"Seul « dans » contient une voyelle nasale, [ɑ̃]."},
+o:{q:"Quel mot a la même voyelle nasale que « dans » ?",o:["enfant","bon","pain"],a:0,f:"« dans » et « enfant » : [ɑ̃]. « bon » : [ɔ̃]. « pain » : [ɛ̃]."},
+l:{q:"Quel état est le contraire d’« être dans le jus » ?",o:["Être très occupé","Être tranquille, avoir du temps","Être pressé"],a:1,f:"Quand on n’est pas dans le jus, on est tranquille : on a le temps."}},
+{t_:"Avoir l’estomac dans les talons",
+ctx:"Après une journée de ski à Tremblant, Sophie n’a rien mangé depuis le matin. Elle dit : « J’ai l’estomac dans les talons, on soupe quand ? »",
+m:{q:"Que veut dire « avoir l’estomac dans les talons » ?",o:["Avoir mal au ventre après un repas","Avoir extrêmement faim","Avoir envie de dormir"],a:1,f:"Après une journée sans manger, l’estomac est « tombé » jusqu’aux talons : on a extrêmement faim."},
+t:{q:"Écoute « J’ai l’estomac dans les talons, on soupe quand ? » Touche les mots avec une voyelle nasale.",w:["estomac","dans","talons","soupe","quand"],a:[1,2,4],f:"« dans », « talons » et « quand » contiennent une voyelle nasale."},
+o:{q:"Parmi « dans », « talons » et « quand », quelle nasale sonne différente des deux autres ?",o:["dans","talons","quand"],a:1,f:"« dans » et « quand » : [ɑ̃]. « talons » : [ɔ̃], souvent plus fermée au Québec, proche de [õ]."},
+l:{q:"Au Québec, comment appelle-t-on le repas du soir ?",o:["Le dîner","Le déjeuner","Le souper"],a:2,f:"Au Québec : déjeuner (matin), dîner (midi), souper (soir). D’où « on soupe quand ? »."}},
+{t_:"Être soupe au lait",
+ctx:"Maxime renverse son café et se met à crier. Sa sœur soupire : « Il est donc ben soupe au lait, pour un rien ! »",
+m:{q:"Que veut dire « être soupe au lait » ?",o:["Aimer beaucoup les soupes crémeuses","Être très fatigué","Se mettre facilement en colère"],a:2,f:"Comme le lait qui déborde vite quand il chauffe, la personne s’emporte pour un rien."},
+t:{q:"Écoute « Il est donc ben soupe au lait, pour un rien ! » Touche les mots avec une voyelle nasale.",w:["donc","ben","soupe","lait","un","rien"],a:[0,1,4,5],f:"« donc », « ben », « un » et « rien » contiennent une voyelle nasale. « soupe » et « lait » n’en ont pas."},
+o:{q:"Trois de ces nasales sont identiques. Lesquelles ?",o:["donc, ben, un","ben, un, rien","donc, un, rien"],a:1,f:"« ben », « un » et « rien » : [ɛ̃] (au Québec, « un » rejoint souvent [ɛ̃]). « donc » : [ɔ̃]."},
+l:{q:"Au Québec, que veut dire « se choquer » ?",o:["Avoir peur","Se fâcher","Être surpris agréablement"],a:1,f:"« Se choquer » = se fâcher, s’emporter : c’est ce que fait quelqu’un de soupe au lait."}},
+{t_:"Avoir des croûtes à manger",
+ctx:"Léa vient de commencer le piano. Son prof lui dit : « C’est bien, mais tu as encore des croûtes à manger avant de jouer ce morceau. »",
+m:{q:"Que veut dire « avoir des croûtes à manger » ?",o:["Avoir encore beaucoup à apprendre avant de réussir","Avoir très faim","Avoir un bon appétit"],a:0,f:"Malgré le verbe « manger », il ne s’agit pas de faim : il reste du chemin et des efforts avant de maîtriser quelque chose."},
+t:{q:"Écoute « Tu as encore des croûtes à manger avant de jouer ». Touche les mots avec une voyelle nasale.",w:["encore","croûtes","manger","avant"],a:[0,2,3],f:"« encore », « manger » et « avant » contiennent une voyelle nasale."},
+o:{q:"Ces nasales s’écrivent « en » ou « an ». Quelle voyelle entends-tu ?",o:["[ɔ̃] comme dans « bon »","[ɑ̃] comme dans « dans »","[ɛ̃] comme dans « pain »"],a:1,f:"« encore », « manger » et « avant » contiennent [ɑ̃], malgré deux graphies différentes."},
+l:{q:"Quel mot décrit une personne qui débute et manque d’expérience ?",o:["Un novice","Un expert","Un champion"],a:0,f:"Un novice est un débutant : c’est lui qui a des croûtes à manger."}}
+];
+let i=0,s=0,sc=0,ans={},sel={},TEST={};
+const $=id=>document.getElementById(id);
+const K=['m','t','o','l'];
+const done=n=>K.every(k=>ans[n+'-'+k]!==undefined);
+function aud(n){const src=AUDIO[i]||TEST[i];return '<p class="small">Écoute '+n+' sur 3</p><audio controls id="au"'+(src?' src="'+src+'"':'')+'></audio>'+(src?'':'<p class="small">Extrait à ajouter. Pour tester : <input type="file" accept="audio/*" onchange="TEST[i]=URL.createObjectURL(this.files[0]);$(\'au\').src=TEST[i]"></p>')}
+function qcm(k){const o=E[i][k],g=ans[i+'-'+k];
+return '<p class="q">'+o.q+'</p>'+o.o.map((t,n)=>'<button class="opt'+(g===undefined?'':n===o.a?' ok':n===g?' ko':'')+'"'+(g===undefined?'':' disabled')+' onclick="pick(\''+k+'\','+n+')">'+t+'</button>').join('')+(g===undefined?'':'<p class="fb">'+(g===o.a?'Bonne réponse. ':'Pas tout à fait. ')+o.f+'</p>')}
+function pick(k,n){const key=i+'-'+k;if(ans[key]!==undefined)return;ans[key]=n;if(n===E[i][k].a)sc++;draw()}
+function tri(){const o=E[i].t,g=ans[i+'-t'],S=sel[i]||[];
+return '<p class="q">'+o.q+'</p><div class="words">'+o.w.map((w,n)=>{let c='w';if(g!==undefined){c+=o.a.includes(n)?' ok':S.includes(n)?' ko':''}else if(S.includes(n))c+=' on';return '<button class="'+c+'"'+(g!==undefined?' disabled':'')+' onclick="tog('+n+')">'+w+'</button>'}).join('')+'</div>'+(g===undefined?'<button class="go" '+(S.length?'':'disabled')+' onclick="check()">Valider</button>':'<p class="fb">'+(g?'Bonne réponse. ':'Pas tout à fait. ')+o.f+'</p>')}
+function tog(n){const S=sel[i]=sel[i]||[],x=S.indexOf(n);x<0?S.push(n):S.splice(x,1);draw()}
+function check(){const o=E[i].t,S=sel[i]||[],ok=S.length===o.a.length&&o.a.every(n=>S.includes(n));ans[i+'-t']=ok;if(ok)sc++;draw()}
+function go(n){i=n;s=0;draw()}
+function step(n){s=n;draw();window.scrollTo(0,0)}
+function draw(){
+const e=E[i];
+$('nav').innerHTML=E.map((x,n)=>'<button class="chip'+(n===i?' on':'')+(done(n)?' fin':'')+'" aria-label="Expression '+(n+1)+'" onclick="go('+n+')">'+(n+1)+'</button>').join('');
+const st=['Écouter','Comprendre','Sons et mots'];
+let h='<div class="steps">'+st.map((x,n)=>'<span class="'+(n===s?'on':n<s?'done':'')+'">'+(n+1)+'. '+x+'</span>').join('')+'</div>';
+if(s===0){
+h+='<h2>Que veut dire cette expression ?</h2><p class="consigne">Écoutez l’extrait autant de fois que vous voulez. Pour l’instant, il n’y a pas de bonne ou de mauvaise réponse : notez votre hypothèse sur le sens de l’expression.</p>'+aud(1)+'<textarea aria-label="Mon hypothèse" placeholder="Je pense que cette expression veut dire…"></textarea><br><button class="go" onclick="step(1)">Vérifier avec le contexte</button>'}
+else if(s===1){
+h+='<h2>'+e.t_+'</h2><p class="consigne">Le contexte de vie québécois vous aidera à comprendre le sens. Réécoutez l’extrait, lisez la situation, puis choisissez la bonne explication.</p>'+aud(2)+'<p class="ctx">'+e.ctx+'</p>'+qcm('m')+'<br><button class="go" '+(ans[i+'-m']===undefined?'disabled':'')+' onclick="step(2)">Continuer</button>'}
+else{
+h+='<h2>'+e.t_+'</h2><p class="consigne">Écoutez une dernière fois. Repérez d’abord le son, puis découvrez ce qu’il a de particulier. Terminez par un mot de vocabulaire.</p>'+aud(3)+tri()+(ans[i+'-t']===undefined?'':qcm('o'))+(ans[i+'-o']===undefined?'':qcm('l'))+'<br><button class="go" '+(done(i)?'':'disabled')+' onclick="'+(i<E.length-1?'go('+(i+1)+')':'end()')+'">'+(i<E.length-1?'Expression suivante':'Voir mon score')+'</button>'}
+$('app').innerHTML=h}
+function end(){$('nav').innerHTML='';const tot=E.length*4;
+$('app').innerHTML='<h2>Bravo !</h2><p class="score">'+sc+' / '+tot+'</p><p>Tu as exploré les six expressions : sens, sons du français québécois et vocabulaire.</p><button class="go" onclick="sc=0;ans={};sel={};go(0)">Recommencer</button>'}
+draw();
+</script>
+</body>
+<footer class="small" style="max-width:640px;margin:0 auto 24px;padding:0 16px;text-align:center;">
+  Extraits audio tirés de l’épisode <em>La nourriture et les expressions, avec Ricardo | É1</em> (série <em>Les mots de l'alimentation</em>, produit par Coyote audio avec la contribution financière de l’Office québécois de la langue française ; animation/recherche/rédaction : Allison Van Rassel ; réalisation : Stéphanie Mignacca ; captation/mixage : Underground ; idée originale : Jacques Labelle et Robert Nadeau), écouté sur <a href="https://baladoquebec.ca/les-mots-de-lalimentation/la-nourriture-et-les-expressions-avec-ricardo-or-e1" target="_blank" rel="noopener noreferrer" style="color:inherit;">BaladoQuebec</a>. Droits réservés aux ayants droit respectifs.
+</footer>
+</html>
